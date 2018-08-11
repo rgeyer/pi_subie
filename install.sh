@@ -24,13 +24,18 @@ cd py-ads1256
 python setup.py install
 rm -rf /tmp/py-ads1256
 
+# Enable the gpio-shutdown overlay
+grep -q "^dtoverlay=gpio-shutdown" /boot/config.txt || echo 'dtoverlay=gpio-shutdown' >> /boot/config.txt
+
 # Get the pimonitor dependency
 mkdir -p /srv/pilogger/data
 cd /tmp
 git clone https://github.com/PiMonitor/PiMonitor.git
 cp -r PiMonitor/pimonitor /usr/local/lib/python2.7/dist-packages/
 cp PiMonitor/data/* /srv/pilogger/data/
+rm -rf /tmp/PiMonitor
 
+# Install my the pilogger
 cd $current_dir
 cp tools/logging/PMLog.py /srv/pilogger/
 cp install/logger_STD_EN_v336.xml /srv/pilogger/data/
