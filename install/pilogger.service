@@ -1,0 +1,12 @@
+[Unit]
+Description=Runs my modified version of PiMonitor to datalog
+After=multi-user.target
+
+[Service]
+Type=idle
+WorkingDirectory=/srv/pilogger
+# Environment=PYTHONPATH=/home/pi/devel/PiMonitor
+ExecStart=/usr/bin/python /srv/pilogger/PMLog.py
+
+[Install]
+WantedBy=multi-user.target
