@@ -1,21 +1,8 @@
 import time, logging, sys, csv, signal, ads1256
+from pimonitor.PM import PM
 from pimonitor.PMConnection import PMConnection
 from pimonitor.PMDemoConnection import PMDemoConnection
 from pimonitor.PMXmlParser import PMXmlParser
-
-class PM(object):
-    def __init__(self):
-        pass
-
-    def set(self, log):
-        self._log = log
-
-	@classmethod
-	def log(cls, message, mid=0):
-		return PM().log_impl(message, mid)
-
-	def log_impl(self, message, mid):
-		return self._log.debug('{} {}'.format(message, mid))
 
 log_and_csv_name_ts = time.time()
 

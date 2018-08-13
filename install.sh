@@ -27,7 +27,13 @@ rm -rf /tmp/py-ads1256
 # Enable the gpio-shutdown overlay
 grep -q "^dtoverlay=gpio-shutdown" /boot/config.txt || echo 'dtoverlay=gpio-shutdown' >> /boot/config.txt
 
-# Get the pimonitor dependency
+# Few tweaks to store logs on an external flash disk (USB stick)
+mkdir -p /media/datalogs
+grep -q "/media/datalogs" /etc/fstab || echo "/dev/sda1 /media/datalogs auto defaults 0 0" >> /etc/fstab
+mount /media/datalogs
+mkdir -p /media/datalogs/pimonitor-log
+
+# Get the pimonitor dependencies
 mkdir -p /srv/pilogger/data
 cd /tmp
 git clone https://github.com/PiMonitor/PiMonitor.git
@@ -35,8 +41,14 @@ cp -r PiMonitor/pimonitor /usr/local/lib/python2.7/dist-packages/
 cp PiMonitor/data/* /srv/pilogger/data/
 rm -rf /tmp/PiMonitor
 
-# Install my the pilogger
+# Monkey patch pimonitor for logging.
 cd $current_dir
+cp tools/logging/PM.py /usr/local/lib/python2.7/dist-packages/pimonitor/PM.py
+
+apt-get install python-pip -y
+pip install pyserial
+
+# Install my the pilogger
 cp tools/logging/PMLog.py /srv/pilogger/
 cp install/logger_STD_EN_v336.xml /srv/pilogger/data/
 
